@@ -59,7 +59,7 @@ def welcome():
 
 @app.route("/api/v1.0/precipitation")
 def precipitation():
-    most_recent_date = session.query(Measurement.date).order_by(Measurement.date.desc()).first()[0]
+    most_recent_date = session.query(Measurement.date).order_by(Measurement.date.desc()).first()
     most_recent_datetime = dt.datetime.strptime(most_recent_date, "%Y-%m-%d")
     one_year_ago = most_recent_datetime - dt.timedelta(days=365)
     prcp_data = session.query(Measurement.date, Measurement.prcp).filter(Measurement.date >= one_year_ago).all()
@@ -95,13 +95,13 @@ def stations():
 def tobs():
     session = Session(engine)
 
-    most_recent_date = session.query(Measurement.date).order_by(Measurement.date.desc()).first()[0]
+    most_recent_date = session.query(Measurement.date).order_by(Measurement.date.desc()).first()
     one_year_ago = dt.datetime.strptime(most_recent_date, "%Y-%m-%d") - dt.timedelta(days=365)
 
     most_active_station = session.query(Measurement.station).\
         group_by(Measurement.station).\
         order_by(func.count().desc()).\
-        first()[0]
+        first()
 
     temp_data = session.query(Measurement.date, Measurement.tobs).\
         filter(Measurement.date >= one_year_ago).\
